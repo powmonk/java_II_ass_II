@@ -27,6 +27,7 @@ public class StoppingDistances {
 			mainPanel = new Panel();
 			mainPanel.setLayout(new GridLayout(5,2));
 
+			//Start label + text field
 			start = new Label();
 			start.setText("Start");
 			mainPanel.add(start);
@@ -34,6 +35,7 @@ public class StoppingDistances {
 			startText = new TextField();
 			mainPanel.add(startText);
 			
+			//End label + text field
 			end = new Label();
 			end.setText("End");
 			mainPanel.add(end);
@@ -41,6 +43,7 @@ public class StoppingDistances {
 			endText = new TextField();
 			mainPanel.add(endText);
 			
+			//Increment label + text field
 			increment = new Label();
 			increment.setText("Increment");
 			mainPanel.add(increment);
@@ -48,17 +51,23 @@ public class StoppingDistances {
 			incrementText = new TextField();
 			mainPanel.add(incrementText);
 			
+			//Clear button
 			clear = new Button("Clear");
 			clear.addActionListener(this);
 			mainPanel.add(clear);
+			
+			//Table button
 			table = new Button("Table");
 			table.setBackground(buttonColor);
 			table.addActionListener(this);
 			mainPanel.add(table);
+			
+			//Exit button
 			exit = new Button("Exit");
 			exit.addActionListener(this);
 			mainPanel.add(exit);
 			
+			//Output Text Area
 			secondPanel = new Panel();
 			secondPanel.setLayout(new GridLayout(1,1));
 			text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
@@ -72,23 +81,46 @@ public class StoppingDistances {
 			
 		}
 		
+		//Small function to check if a string is also a valid integer/positive
+		public static boolean checkInt(String input) {
+			try{ 
+		    	Integer.parseInt(input); 
+		    }catch(NumberFormatException e) { 
+		    	return false; 
+		    }catch(NullPointerException e) {
+		    	return false;
+		    }
+			
+			if(Integer.parseInt(input) > 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == table){
-				text.setText(table(
-				Integer.parseInt(startText.getText()), 
-				Integer.parseInt(endText.getText()), 
-				Integer.parseInt(incrementText.getText())));
+				if(checkInt(startText.getText()) && checkInt(endText.getText()) && checkInt(incrementText.getText()) ){
+					text.setText(table(
+						Integer.parseInt(startText.getText()), 
+						Integer.parseInt(endText.getText()), 
+						Integer.parseInt(incrementText.getText())
+							));
+				}else{
+					text.setText("All inputs above must be whole numbers");
+				}
 			}else if(e.getSource() == clear){
 				text.setText(" ");
 				startText.setText("");
 				endText.setText("");
 				incrementText.setText("");
 				
-			}else  if(e.getSource() == exit){
+			}else if(e.getSource() == exit){
 				System.exit(0);
 			}
 		}
 		
+		//Small method to return x amount of y strings
 		public static String returnString(int n, String s){
 			String returnString = "";
 			
@@ -100,6 +132,7 @@ public class StoppingDistances {
 			return returnString;
 		}
 		
+		// This is where the magic happens. This method builds the string that goes in the main text area
 		public static String table(int velocity, int end, int increment ){
 			int stopDist;
 			int asteriskCount = 27;
