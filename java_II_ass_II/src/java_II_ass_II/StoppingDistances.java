@@ -58,9 +58,6 @@ public class StoppingDistances {
 			exit = new Button("Exit");
 			exit.addActionListener(this);
 			mainPanel.add(exit);
-			//filler = new Button("");
-			//filler.addActionListener(this);
-			//mainPanel.add(filler);
 			
 			secondPanel = new Panel();
 			secondPanel.setLayout(new GridLayout(1,1));
@@ -77,12 +74,12 @@ public class StoppingDistances {
 		
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == table){
-				text.append(table(
+				text.setText(table(
 				Integer.parseInt(startText.getText()), 
 				Integer.parseInt(endText.getText()), 
 				Integer.parseInt(incrementText.getText())));
 			}else if(e.getSource() == clear){
-				text.setText("");
+				text.setText(" ");
 				startText.setText("");
 				endText.setText("");
 				incrementText.setText("");
@@ -125,7 +122,7 @@ public class StoppingDistances {
 		
 		private Color buttonColor = new Color(0, 150, 0);
 		private Label start, end, increment;
-		private Button clear, table, exit, filler;
+		private Button clear, table, exit;
 		private TextField startText, endText, incrementText;
 		private TextArea text;
 		private Panel mainPanel, secondPanel;
