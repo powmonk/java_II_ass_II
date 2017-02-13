@@ -24,17 +24,33 @@ public class StoppingDistances {
 		 */
 		private static final long serialVersionUID = 1L;
 		public StoppingFrame(){
-			final int DEFAULT_FRAME_WIDTH = 500;
-			final int DEFAULT_FRAME_HEIGHT = 500;
+			final int DEFAULT_FRAME_WIDTH = 250;
+			final int DEFAULT_FRAME_HEIGHT = 400;
 			setSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
 			mainPanel = new Panel();
 			mainPanel.setLayout(new GridLayout(5,2));
+
 			start = new Label();
 			start.setText("Start");
 			mainPanel.add(start);
 			
-			item = new TextField();
-			mainPanel.add(item);
+			startText = new TextField();
+			mainPanel.add(startText);
+			
+			end = new Label();
+			end.setText("End");
+			mainPanel.add(end);
+			
+			endText = new TextField();
+			mainPanel.add(endText);
+			
+			increment = new Label();
+			increment.setText("Increment");
+			mainPanel.add(increment);
+			
+			incrementText = new TextField();
+			mainPanel.add(incrementText);
+			
 			clear = new Button("Clear");
 			clear.addActionListener(this);
 			mainPanel.add(clear);
@@ -50,6 +66,7 @@ public class StoppingDistances {
 			
 			secondPanel = new Panel();
 			secondPanel.setLayout(new GridLayout(1,1));
+			secondPanel.setFont(font);
 			text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
 			secondPanel.add(text);
 			setLayout(new GridLayout(2, 1));
@@ -60,18 +77,36 @@ public class StoppingDistances {
 		
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == clear){
-				item.setText("");
+				text.setText("");
+				startText.setText("");
+				endText.setText("");
+				incrementText.setText("");
+				
 			}else if(e.getSource() == table){
-				text.append(item.getText() + "\n");
-			
+				text.append(table(
+				Integer.parseInt(startText.getText()), 
+				Integer.parseInt(endText.getText()), 
+				Integer.parseInt(incrementText.getText())));
 			}else if(e.getSource() == exit){
 				System.exit(0);
 			}
 		}
 		
+		public static String table(int start, int end, int increment ){
+			int stopDist;
+			
+			while(start <= end){ 
+				stopDist = (start*start) / 20 + start;
+				start += increment;
+			}
+			
+			return "hello";
+		}
+		
+		private Font font = new Font("Courier New", 1, 25);
 		private Label start, end, increment;
 		private Button clear, table, exit, filler;
-		private TextField item;
+		private TextField startText, endText, incrementText;
 		private TextArea text;
 		private Panel mainPanel, secondPanel;
 	}
