@@ -114,6 +114,7 @@ public class StoppingDistances {
 				startText.setText("");
 				endText.setText("");
 				incrementText.setText("");
+				startText.requestFocus();
 				
 			}else if(e.getSource() == exit){
 				System.exit(0);
