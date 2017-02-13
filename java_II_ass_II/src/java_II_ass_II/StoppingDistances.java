@@ -10,6 +10,7 @@ import java.awt.TextArea;
 import java.awt.Button;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Color;
 
 public class StoppingDistances {
 	public static void main(String[] args){
@@ -19,10 +20,6 @@ public class StoppingDistances {
 	}
 	
 	static class StoppingFrame extends Frame implements ActionListener{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 		public StoppingFrame(){
 			final int DEFAULT_FRAME_WIDTH = 250;
 			final int DEFAULT_FRAME_HEIGHT = 400;
@@ -55,19 +52,22 @@ public class StoppingDistances {
 			clear.addActionListener(this);
 			mainPanel.add(clear);
 			table = new Button("Table");
+			table.setBackground(buttonColor);
 			table.addActionListener(this);
 			mainPanel.add(table);
 			exit = new Button("Exit");
 			exit.addActionListener(this);
 			mainPanel.add(exit);
-			filler = new Button("");
-			filler.addActionListener(this);
-			mainPanel.add(filler);
+			//filler = new Button("");
+			//filler.addActionListener(this);
+			//mainPanel.add(filler);
 			
 			secondPanel = new Panel();
 			secondPanel.setLayout(new GridLayout(1,1));
-			secondPanel.setFont(font);
 			text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
+			text.setFont(new Font("Courier", 1, 12));
+			text.setEditable(false);
+
 			secondPanel.add(text);
 			setLayout(new GridLayout(2, 1));
 			add(mainPanel); add(secondPanel);
@@ -76,34 +76,54 @@ public class StoppingDistances {
 		}
 		
 		public void actionPerformed(ActionEvent e){
-			if(e.getSource() == clear){
+			if(e.getSource() == table){
+				text.append(table(
+				Integer.parseInt(startText.getText()), 
+				Integer.parseInt(endText.getText()), 
+				Integer.parseInt(incrementText.getText())));
+			}else if(e.getSource() == clear){
 				text.setText("");
 				startText.setText("");
 				endText.setText("");
 				incrementText.setText("");
 				
-			}else if(e.getSource() == table){
-				text.append(table(
-				Integer.parseInt(startText.getText()), 
-				Integer.parseInt(endText.getText()), 
-				Integer.parseInt(incrementText.getText())));
-			}else if(e.getSource() == exit){
+			}else  if(e.getSource() == exit){
 				System.exit(0);
 			}
 		}
 		
-		public static String table(int start, int end, int increment ){
-			int stopDist;
+		public static String returnString(int n, String s){
+			String returnString = "";
 			
-			while(start <= end){ 
-				stopDist = (start*start) / 20 + start;
-				start += increment;
+			while(n>0){
+				returnString += s;
+				n--;
 			}
 			
-			return "hello";
+			return returnString;
 		}
 		
-		private Font font = new Font("Courier New", 1, 25);
+		public static String table(int velocity, int end, int increment ){
+			int stopDist;
+			int asteriskCount = 27;
+			String output = String.format("%s\n", returnString(asteriskCount, "*"));
+			
+			output += "*Speed(mph)*Distance(feet)*\n";
+			
+			output += String.format("%s\n", returnString(asteriskCount, "*"));
+			
+			while(velocity <= end){ 
+				stopDist = (velocity*velocity) / 20 + velocity;
+				output += String.format("*%6d%4s*%7d%7s*\n", velocity, "", stopDist,"");
+				velocity += increment;
+			}
+
+			output += String.format("%s\n", returnString(asteriskCount, "*"));
+			
+			return output;
+		}
+		
+		private Color buttonColor = new Color(0, 150, 0);
 		private Label start, end, increment;
 		private Button clear, table, exit, filler;
 		private TextField startText, endText, incrementText;
