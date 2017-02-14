@@ -1,5 +1,3 @@
-package java_II_ass_II;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Label;
@@ -17,6 +15,7 @@ public class StoppingDistances {
 		StoppingFrame frame = new StoppingFrame();
 		frame.setTitle("Stopping Distances");
 		frame.setVisible(true);
+		
 	}
 	
 	static class StoppingFrame extends Frame implements ActionListener{
@@ -53,67 +52,84 @@ public class StoppingDistances {
 			
 			//Clear button
 			clear = new Button("Clear");
+			clear.setForeground(Color.WHITE);
+			clear.setBackground(new Color(150, 0, 0));
 			clear.addActionListener(this);
 			mainPanel.add(clear);
 			
 			//Table button
 			table = new Button("Table");
+			table.setForeground(Color.WHITE);
 			table.setBackground(buttonColor);
 			table.addActionListener(this);
 			mainPanel.add(table);
 			
 			//Exit button
 			exit = new Button("Exit");
+			exit.setForeground(Color.WHITE);
+			exit.setBackground(buttonColor);
 			exit.addActionListener(this);
 			mainPanel.add(exit);
-			
+
 			//Output Text Area
 			secondPanel = new Panel();
 			secondPanel.setLayout(new GridLayout(1,1));
 			text = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
+			text.setBackground(Color.BLACK);
+			text.setForeground(Color.GREEN);
 			text.setFont(new Font("Courier", 1, 12));
 			text.setEditable(false);
-
 			secondPanel.add(text);
+
 			setLayout(new GridLayout(2, 1));
 			add(mainPanel); add(secondPanel);
 			
 			
 		}
 		
-		//Small function to check if a string is also a valid integer/positive
+		//Small method to check if a string is also a valid integer and within an acceptable range
 		public static boolean checkInt(String input) {
+			int i;
 			try{ 
-		    	Integer.parseInt(input); 
+				 i = Integer.parseInt(input); 
 		    }catch(NumberFormatException e) { 
 		    	return false; 
 		    }catch(NullPointerException e) {
 		    	return false;
 		    }
 			
-			if(Integer.parseInt(input) > 0){
+			if(i > 0 && i < 9999999){
 				return true;
 			}else{
 				return false;
 			}
 		}
 		
+		//This is the method that check for button presses and performs the appropriate actions
 		public void actionPerformed(ActionEvent e){
 			if(e.getSource() == table){
-				if(checkInt(startText.getText()) && checkInt(endText.getText()) && checkInt(incrementText.getText()) ){
-					text.setText(table(
-						Integer.parseInt(startText.getText()), 
-						Integer.parseInt(endText.getText()), 
-						Integer.parseInt(incrementText.getText())
-							));
+				String startString = startText.getText().trim();
+				String endString = endText.getText().trim();
+				String incrementString = incrementText.getText().trim();
+				
+				if(checkInt(startString) && checkInt(endString) && checkInt(incrementString) ){
+					if(Integer.parseInt(startString) <= Integer.parseInt(endString)){
+						text.setText(table(
+							Integer.parseInt(startString), 
+							Integer.parseInt(endString), 
+							Integer.parseInt(incrementString)
+						));
+					}else{
+						text.setText("Starting speed cannot be higher than the end speed");
+					}
 				}else{
-					text.setText("All inputs above must be whole numbers");
+					text.setText("All inputs above must be whole numbers between 0 - 9999999");
 				}
 			}else if(e.getSource() == clear){
 				text.setText(" ");
-				startText.setText("");
-				endText.setText("");
-				incrementText.setText("");
+				startText.setText(" ");
+				endText.setText(" ");
+				incrementText.setText(" ");
 				startText.requestFocus();
 				
 			}else if(e.getSource() == exit){
@@ -145,6 +161,11 @@ public class StoppingDistances {
 			
 			while(velocity <= end){ 
 				stopDist = (velocity*velocity) / 20 + velocity;
+				if(stopDist > 9999999 || stopDist < 0){
+					output += String.format("%s\n", returnString(asteriskCount, "*"));
+					output += String.format("*%4s%-21s*\n", "", "Result Out of Range");
+					break;
+				}
 				output += String.format("*%6d%4s*%7d%7s*\n", velocity, "", stopDist,"");
 				velocity += increment;
 			}
